@@ -19,6 +19,93 @@
       background: #e2e8f0;
     }
 
+    /* Плавающая информационная карточка в правом верхнем углу карты */
+    #infoCard {
+      position: absolute;
+      top: 18px;
+      right: 458px;
+      width: 340px;
+      max-width: calc(100vw - 470px);
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 16px;
+      padding: 16px 18px 18px 18px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.16);
+      z-index: 900;
+      display: none;
+      animation: fadeInCard 0.22s ease-out;
+    }
+
+    @keyframes fadeInCard {
+      from { opacity: 0; transform: translateY(-8px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .info-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .info-card-title {
+      font-size: 1.22rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      line-height: 1.25;
+    }
+
+    .btn-close-card {
+      background: rgba(148, 163, 184, 0.18);
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      font-size: 1.05rem;
+      color: #475569;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+    }
+
+    .btn-close-card:hover {
+      background: rgba(239, 68, 68, 0.18);
+      color: #dc2626;
+    }
+
+    .info-card-object {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .info-card-address {
+      font-size: 0.9rem;
+      color: #334155;
+      line-height: 1.4;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .info-card-district {
+      font-size: 0.82rem;
+      color: #64748b;
+      font-weight: 600;
+      border-top: 1px solid rgba(226, 232, 240, 0.8);
+      padding-top: 8px;
+      margin-top: 6px;
+    }
+
     #sidebar {
       position: absolute;
       top: 0;
@@ -268,100 +355,32 @@
       color: #64748b;
     }
 
-    .balloon-box {
-      padding: 6px 2px;
-      font-size: 0.88rem;
-      max-width: 290px;
-    }
-
-    .balloon-obj {
-      font-weight: 700;
-      color: #0f172a;
-      margin-top: 6px;
-      line-height: 1.35;
-    }
-
-    .balloon-addr {
-      color: #475569;
-      margin-top: 5px;
-      font-size: 0.82rem;
-    }
-
-    .balloon-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-top: 12px;
-      border-top: 1px solid #e2e8f0;
-      padding-top: 10px;
-    }
-
-    .btn-route-row { display: flex; gap: 6px; }
-
-    .btn-action {
-      flex: 1;
-      padding: 7px 10px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      border-radius: 8px;
-      text-decoration: none;
-      text-align: center;
-      cursor: pointer;
-      border: 1px solid transparent;
-      display: inline-block;
-      transition: all 0.15s;
-    }
-
-    .btn-yamaps {
-      background: #fee2e2;
-      color: #b91c1c;
-      border-color: #fca5a5;
-    }
-    .btn-yamaps:hover { background: #fecaca; }
-
-    .btn-2gis {
-      background: #dcfce7;
-      color: #15803d;
-      border-color: #86efac;
-    }
-    .btn-2gis:hover { background: #bbf7d0; }
-
-    .btn-copy {
-      background: #f8fafc;
-      color: #334155;
-      border-color: #cbd5e1;
-      width: 100%;
-    }
-    .btn-copy:hover { background: #e2e8f0; }
-
-    #toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #0f172a;
-      color: #fff;
-      padding: 9px 18px;
-      border-radius: 30px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.25);
-      z-index: 9999;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-    #toast.show { opacity: 1; }
-
     @media (max-width: 768px) {
       #map { right: 0; height: 50%; }
       #sidebar { top: 50%; width: 100%; height: 50%; }
+      #infoCard {
+        right: 14px;
+        top: 14px;
+        width: calc(100% - 28px);
+        max-width: none;
+      }
     }
   </style>
 </head>
 <body>
 
   <div id="map"></div>
+
+  <!-- Плавающая карточка с информацией в правом углу карты -->
+  <div id="infoCard">
+    <div class="info-card-header">
+      <div id="cardTitle" class="info-card-title"></div>
+      <button class="btn-close-card" onclick="closeInfoCard()" title="Закрыть">✕</button>
+    </div>
+    <div id="cardObject" class="info-card-object"></div>
+    <div id="cardAddress" class="info-card-address"></div>
+    <div id="cardDistrict" class="info-card-district"></div>
+  </div>
 
   <div id="sidebar">
     <div class="sidebar-header">
@@ -401,11 +420,11 @@
         </select>
       </div>
 
-      <!-- 2. Избирательный округ (динамический для каждого района/города) -->
+      <!-- 2. Избирательный округ -->
       <div class="form-group" id="okrugGroup">
         <label class="form-label" for="okrugSelect" id="okrugLabel">2. Выбор округа</label>
         <select id="okrugSelect" class="select-control" onchange="onOkrugChange()">
-          <option value="all">Все округа</option>
+          <option value="all">Все ООИК</option>
         </select>
       </div>
 
@@ -424,8 +443,6 @@
     <div class="counter" id="counterText">Отображено: 0</div>
     <ul class="item-list" id="uikList"></ul>
   </div>
-
-  <div id="toast">Адрес скопирован в буфер</div>
 
   <script>
     const districtOrder = [
@@ -464,7 +481,7 @@
       return null;
     }
 
-    // Реестр районных / городских избирательных округов (РОИО / РОИО) по каждому району:
+    // Реестр районных / городских избирательных округов (РОИО) по каждому району:
     const districtRoioMap = {
       "город Аксу": [
         { id: 1, uiks: [477, 482] },
@@ -579,6 +596,7 @@
       return null;
     }
 
+    // 16 Областных окружных комиссий (ООИК)
     const ooikData = [
       [1, 52.298703, 76.934400, "КГУ «СОШ имени Торайгырова»", "Павлодар, улица Торайгырова, 24"],
       [2, 52.297888, 76.950011, "Павлодарский машиностроительный колледж (тел. 554690)", "Павлодар, улица Олжабай батыра, 43"],
@@ -1094,7 +1112,6 @@
     let myMap, markersGroup, placemarks = {};
 
     ymaps.ready(() => {
-      // Инициализируем стандартный стабильный векторный слой
       myMap = new ymaps.Map("map", {
         center: [52.30, 76.95],
         zoom: 9,
@@ -1105,44 +1122,26 @@
       markersGroup = new ymaps.GeoObjectCollection();
       myMap.geoObjects.add(markersGroup);
 
-      function createBalloonHtml(item) {
-        const isOoik = item.type === "ooik";
-        const titleColor = isOoik ? '#dc2626' : '#0d9488';
-        const yaRouteUrl = `https://yandex.ru/maps/?rtext=~${item.lat},${item.lng}&rtt=auto`;
-        const dgisRouteUrl = `https://2gis.kz/routeSearch/to/${item.lng},${item.lat}`;
-        const copyText = `${item.object}, ${item.address} (${item.lat}, ${item.lng})`.replace(/'/g, "\\'");
-        const okrugPrefix = item.district === "Щербактинский район" ? "РОИО" : "РОИО";
-
-        return `
-          <div class="balloon-box">
-            <div style="font-size:1.05rem; font-weight:800; color:${titleColor};">
-              ${item.uik} ${item.roio ? `<span style="font-size:0.8rem; color:#d97706;">(${okrugPrefix} №${item.roio})</span>` : ''}
-              ${item.goik ? `<span style="font-size:0.8rem; color:#0284c7;">(ГОИК №${item.goik})</span>` : ''}
-            </div>
-            <div class="balloon-obj">${item.object}</div>
-            <div class="balloon-addr">📍 ${item.address}</div>
-            <div style="font-size:0.75rem; color:#94a3b8; margin-top:3px;">${item.district}</div>
-            
-            <div class="balloon-actions">
-              <div class="btn-route-row">
-                <a href="${yaRouteUrl}" target="_blank" class="btn-action btn-yamaps">Маршрут (Яндекс)</a>
-                <a href="${dgisRouteUrl}" target="_blank" class="btn-action btn-2gis">Маршрут (2ГИС)</a>
-              </div>
-              <button class="btn-action btn-copy" onclick="copyToClipboard('${copyText}')">📋 Скопировать адрес</button>
-            </div>
-          </div>
-        `;
-      }
+      // Клик по свободной области карты закрывает карточку
+      myMap.events.add('click', () => {
+        closeInfoCard();
+      });
 
       allRegistry.forEach(item => {
         const isOoik = item.type === "ooik";
         const pm = new ymaps.Placemark([item.lat, item.lng], {
           iconContent: item.num,
-          balloonContent: createBalloonHtml(item),
           hintContent: `${item.uik}: ${item.object}`
         }, {
           preset: isOoik ? 'islands#redCircleIcon' : 'islands#darkGreenCircleIcon',
-          draggable: false
+          draggable: false,
+          hasBalloon: false // Отключаем стандартный белый всплывающий балун
+        });
+
+        // По клику на метку открываем карточку в правом углу
+        pm.events.add('click', (e) => {
+          e.stopPropagation();
+          focusItem(item.id);
         });
 
         placemarks[item.id] = pm;
@@ -1153,24 +1152,30 @@
       document.getElementById('searchInput').addEventListener('input', onSearchInput);
     });
 
-    window.copyToClipboard = function(text) {
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(text).then(() => showToast());
-      } else {
-        const input = document.createElement('textarea');
-        input.value = text;
-        document.body.appendChild(input);
-        input.select();
-        document.execCommand('copy');
-        document.body.removeChild(input);
-        showToast();
-      }
-    };
+    // Функция отображения карточки в углу
+    function openInfoCard(item) {
+      const isOoik = item.type === "ooik";
+      const titleColor = isOoik ? '#dc2626' : '#0d9488';
+      const okrugPrefix = item.district === "Щербактинский район" ? "РОИО" : "РОИО";
 
-    function showToast() {
-      const toast = document.getElementById('toast');
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2000);
+      const titleHtml = `
+        <span style="color: ${titleColor};">${item.uik}</span>
+        ${item.roio ? `<span style="font-size:0.85rem; color:#d97706; margin-left:6px;">(${okrugPrefix} №${item.roio})</span>` : ''}
+        ${item.goik ? `<span style="font-size:0.85rem; color:#0284c7; margin-left:6px;">(ГОИК №${item.goik})</span>` : ''}
+      `;
+
+      document.getElementById('cardTitle').innerHTML = titleHtml;
+      document.getElementById('cardObject').textContent = item.object;
+      document.getElementById('cardAddress').innerHTML = item.address ? `📍 <span>${item.address}</span>` : '';
+      document.getElementById('cardDistrict').textContent = item.district;
+
+      const card = document.getElementById('infoCard');
+      card.style.display = 'block';
+    }
+
+    function closeInfoCard() {
+      document.getElementById('infoCard').style.display = 'none';
+      document.querySelectorAll('.item').forEach(el => el.classList.remove('active-item'));
     }
 
     window.findNearestUIK = function() {
@@ -1209,6 +1214,7 @@
     };
 
     function onDistrictChange() {
+      closeInfoCard();
       const distVal = document.getElementById('districtSelect').value;
       const okrugGroup = document.getElementById('okrugGroup');
       const okrugSelect = document.getElementById('okrugSelect');
@@ -1251,6 +1257,7 @@
     }
 
     function onOkrugChange() {
+      closeInfoCard();
       filterData(true);
     }
 
@@ -1336,7 +1343,7 @@
 
       if (autoCenter && visibleCoords.length > 0) {
         if (visibleCoords.length === 1) {
-          myMap.setCenter(visibleCoords[0], 14, { duration: 300 });
+          myMap.setCenter(visibleCoords[0], 17, { duration: 300 });
         } else {
           myMap.setBounds(ymaps.util.bounds.fromPoints(visibleCoords), { zoomMargin: 40, duration: 400 });
         }
@@ -1358,7 +1365,7 @@
         activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
 
-      // Зум 17 — детальный уровень домов, улиц и точного контура здания (как на картинке)
+      // Приближение карты до 17-го зума (видны здания, дворы и улицы)
       myMap.setCenter([item.lat, item.lng], 17, { duration: 350 });
       openInfoCard(item);
     }
