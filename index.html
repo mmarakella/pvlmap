@@ -1358,9 +1358,9 @@
         activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
 
-      myMap.setCenter([item.lat, item.lng], 14, { duration: 350 }).then(() => {
-        placemarks[id].balloon.open();
-      });
+      // Зум 17 — детальный уровень домов, улиц и точного контура здания (как на картинке)
+      myMap.setCenter([item.lat, item.lng], 17, { duration: 350 });
+      openInfoCard(item);
     }
 
     function renderList(items) {
